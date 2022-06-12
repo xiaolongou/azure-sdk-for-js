@@ -245,6 +245,19 @@ export class ServiceBusSenderImpl implements ServiceBusSender {
     }
   }
 
+  async sendMessage(message: ServiceBusMessage, options?: OperationOptionsBase): Promise<void> {
+    this._throwIfSenderOrConnectionClosed();
+    throwTypeErrorIfParameterMissing(this._context.connectionId, "messages", messages);
+    try {
+      const result = await this._sender.send(message, options);
+      return result;
+    } catch (error) {
+      throw error;
+    } finally {
+    }
+  }
+
+
   async createMessageBatch(options?: CreateMessageBatchOptions): Promise<ServiceBusMessageBatch> {
     this._throwIfSenderOrConnectionClosed();
     return this._sender.createBatch(options);
